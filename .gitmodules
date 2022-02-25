@@ -1,0 +1,4 @@
+[submodule "dependencies/tvm"]
+	path = dependencies/tvm
+	url = https://github.com/apache/tvm.git
+	branch = v0.7
