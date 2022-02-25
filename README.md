@@ -1,2 +1,2 @@
 # TFM
-Deep Neuroevolution over Reconfigurable Hardware - Trabajo Fin de Máster (Electrónica Industrial UPM)
+Deep Neuroevolution in Reconfigurable Hardware - Trabajo Fin de Máster (Electrónica Industrial UPM)
