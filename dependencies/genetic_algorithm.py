@@ -3,8 +3,11 @@
 """
 
 import numpy as np
-import skvideo.io
 import copy
+import skvideo
+ffmpeg_path = "C:/Users/Javier/Documents/tfm/dependencies/ffmpeg/bin"
+skvideo.setFFmpegPath(ffmpeg_path)
+import skvideo.io
 
 from dependencies.environment import make_env
 from dependencies.utilities import mkdir, Timer
@@ -34,6 +37,7 @@ class GeneticAlgorithm():
         self.model_to_keep = int(population * 0.2)
         self.mutation_power = mutation_power
         self.re_evaluations = re_evaluations
+        self.environment = environment
         self.debug = debug
         self.visualize = visualize
         self.output_dir = output_dir
@@ -46,7 +50,7 @@ class GeneticAlgorithm():
 
         timeStamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
-        self.output_dir += str('/' + str(timeStamp) + '#' + str(arch))
+        self.output_dir += str('/' + str(timeStamp) + '#' + str(arch) + '#' + environment)
 
         mkdir('.', str(self.output_dir))
         mkdir('.', str(self.output_dir) + '/video')
@@ -62,7 +66,7 @@ class GeneticAlgorithm():
         self.currentPool = list()
 
         # Creamos entorno de atariPy-Keras
-        self.env = make_env(environment)
+        self.env = make_env(self.environment)
 
         if self.weight_seeds_path:
             self.weight_seeds = np.load(self.weight_seeds_path, allow_pickle=True)
@@ -78,7 +82,7 @@ class GeneticAlgorithm():
         if self.start_model_weights:
             for idx in range(self.model_to_keep):
                 self.currentPool[idx] = np.load(self.start_model_weights, allow_pickle=True)
-    
+            
     @Timer(name="GenAlg-init")
     def init_population(self, seeds=None):
 
@@ -129,29 +133,6 @@ class GeneticAlgorithm():
         
         if record:
             writer.close()
-
-    def crossover(current_generation, model_idx1, model_idx2, crossover_prob=0.5):
-        """
-        Crossover two neural network to produce two offsprings by 
-        swapping the weights randomly 
-        Attributes:
-            current_generation(list): A list of models at current generation
-            model_idx1(int): Index of first model
-            model_idx2(int): Index of secound model
-        """
-
-        weights1 = current_generation[model_idx1].get_weights()
-        weights2 = current_generation[model_idx2].get_weights()
-        weightsnew1 = weights1
-        weightsnew2 = weights2
-        
-        for swap_layer in [0,2,4,6,8]: # the layers of network
-            if np.random.uniform(0,1)>crossover_prob:
-                
-                weightsnew1[swap_layer] = weights2[swap_layer]
-                weightsnew2[swap_layer] = weights1[swap_layer]
-                
-        return np.asarray([weightsnew1, weightsnew2])
 
     @Timer(name="GenAlg-mutate")
     def mutate(self,weights,mutation_power):

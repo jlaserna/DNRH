@@ -33,20 +33,21 @@ class vta_DNN(DNNmodel):
         self.__pool_models = pool_models
         self.__num_models = num_models
         self.__atari_env = env
-        self.poolVTA = [    ['pynq.micasa.local', 12345, False],
+        self.poolVTA = [    ['192.168.1.248', 12345, False],
                             #['192.168.2.12', 12345, False], 
                             #['192.168.2.13', 12345, False],
                             #['192.168.2.14', 12345, False],
                             #['192.168.2.15', 12345, False],
                         ]
+
         self.workersSem = Semaphore(len(self.poolVTA))
         self.compileSem = Semaphore(1)
-        self.env = vta.get_env()
-        self.target = self.env.target
 
         log.basicConfig(format="[ %(levelname)s ] %(message)s", level=log.CRITICAL, stream=sys.stdout)
         log.getLogger('autotvm').setLevel(log.CRITICAL)
 
+        self.env = vta.get_env()
+        self.target = self.env.target
         
     def update_pool(self, pool_models):
         self.__pool_models = pool_models

@@ -5,7 +5,7 @@ class fitnessGenerator:
 
     def __init__(self, env=None):
 
-        self.fitness_functions = {   "PongNoFrameskip-v4" : (lambda input : sum(input)),
+        self.fitness_funtions = {   "PongNoFrameskip-v4" : (lambda input : sum(input)),
                                     #"PongNoFrameskip-v4" : self.discount_rewards,
                                 }
         self.env = env
@@ -13,7 +13,9 @@ class fitnessGenerator:
         return
 
     def getFitnessFunction(self):
-        return self.fitness_functions[self.env]
+        if self.env not in self.fitness_funtions:
+            return lambda input : sum(input)
+        return self.fitness_funtions[self.env]
 
     def discount_rewards(self, rewards):
 

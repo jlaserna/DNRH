@@ -3,8 +3,9 @@
 """
 
 from argparse import ArgumentParser
+ENVS_NAME = ["PongNoFrameskip-v4", "SpaceInvaders-v0", "Assault-v4"]
 
-ENV_NAME = "PongNoFrameskip-v4"
+ENV_NAME = ENVS_NAME[0]
 
 def main():
     parser = ArgumentParser()

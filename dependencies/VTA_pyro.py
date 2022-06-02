@@ -22,11 +22,8 @@ class VTA_PYNQ(object):
     def __init__(self, env_name="PongNoFrameskip-v4"):
         self.ctx = tvm.ext_dev(0)
         self.atariEnv = make_env(env_name)
-        self.lib = module.load_module('/tmp/VTAPacked.tar')
-        self.fitness_function = fitnessGenerator(env_name).getFitnessFunction()
 
-        dll_path = "/home/xilinx/VTA/dependencies/tvm/build/libvta.so"
-        ctypes.CDLL(dll_path, ctypes.RTLD_GLOBAL)
+        self.fitness_function = fitnessGenerator(env_name).getFitnessFunction()
 
         self.clean()
 
@@ -46,6 +43,10 @@ class VTA_PYNQ(object):
 
             with open('/tmp/VTAPacked.tar', 'wb') as f:
                 f.write(graphtar)
+
+            self.lib = module.load_module('/tmp/VTAPacked.tar')
+            dll_path = "/home/xilinx/VTA/dependencies/tvm/build/libvta.so"
+            ctypes.CDLL(dll_path, ctypes.RTLD_GLOBAL)
 
             self.VTAmodel = graph_runtime.GraphModule(self.lib["default"](self.ctx))
         except Exception as exc:

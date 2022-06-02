@@ -30,7 +30,7 @@ class cpu_DNN(DNNmodel):
     @Timer(name="DNN-episode")
     def run_episode(self, iterations=1):
 
-        fitness = [-22 for _ in range(self.__num_models)]
+        fitness = [0 for _ in range(self.__num_models)]
 
         for model_num in range(self.__num_models):
 
